@@ -26,7 +26,7 @@ class IdentifiScore:
 
             if payload.address:
                 referral_service = SomniaReferralService()
-                referral_count = referral_service.get_referral_count(payload.address)
+                referral_count = await referral_service.get_referral_count_async(payload.address)
 
             total_social_score = followers_count + avg_views
             total_reputation_score = avg_likes + avg_replies + avg_retweets

@@ -1,3 +1,4 @@
+import asyncio
 import os
 from typing import Optional
 
@@ -62,3 +63,6 @@ class SomniaReferralService:
             return self.contract.functions.referralCount(normalized).call()
         except Exception as exc:
             raise RuntimeError("Failed to fetch referral count") from exc
+
+    async def get_referral_count_async(self, address: str) -> int:
+        return await asyncio.to_thread(self.get_referral_count, address)
