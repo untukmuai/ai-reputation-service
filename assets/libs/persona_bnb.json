@@ -1,0 +1,122 @@
+[
+  {
+      "persona": "The Builder",
+      "traits_matched": ["Project Development & Building", "Blockchain Utility"],
+      "motivations": ["Push the 'Build N Build' ethos", "Spotlight ecosystem innovation"],
+      "content_signal": ["Busy building", "tech improvements", "high-engagement milestone tweets"],
+      "tier": {
+          "1": {
+              "indicator" : "≥ 2 original dev/AI proposals or GitHub-linked posts",
+              "description": "Sets direction with high-value technical innovation."
+          },
+          "2": {
+              "indicator" : "≥ 6 technical updates (AI x Web3, infra)",
+              "description": "Actively contributes updates that drive progress"
+          },
+          "3": {
+              "indicator" : "≥ 10 retweets of builder/AI content",
+              "description": "Supports the builder culture through amplification"
+          }
+      }
+  },
+  {
+      "persona": "The Community Spark",
+      "traits_matched": ["Cultural energy", "casual interactions", "humor", "GameFi identity"],
+      "motivations": ["Keep vibes alive with memes, 'gm's, and gaming culture that rallies the community"],
+      "content_signal": ["Daily greetings", "meme posts", "GameFi tournaments", "NFT play content"],
+      "tier": {
+          "1": {
+              "indicator" : "Launches ≥ 1 new meme/hashtag with 50+ retweets",
+              "description": "Originates culture-driving memes and trends"
+          },
+          "2": {
+              "indicator" : "≥ 40 replies in threads (≈ 10 per week)",
+              "description": "Builds connections through active conversations"
+          },
+          "3": {
+              "indicator" : "≥ 90 casual “gm”/emoji/game posts (≈ 3 per day)",
+              "description": "Maintains energy and relatability with daily posts"
+          }
+      }
+  },
+  {
+      "persona": "The Promoter",
+      "traits_matched": ["Event promotion", "ecosystem amplification", "DeFi signals"],
+      "motivations": ["Amplify BNB Chain events, stats, and DEX adoption to maximize visibility"],
+      "content_signal": ["Hackathon announcements", "DEX launch campaigns", "liquidity farming stats"],
+      "tier": {
+          "1": {
+              "indicator" : "≥ 2 live events/DEX launch threads or spaces per month",
+              "description": "Takes center stage in amplifying major launches"
+          },
+          "2": {
+              "indicator" : "≥ 10 reshared official/DEX announcements within 24h",
+              "description": "Ensures fast spread of critical updates"
+          },
+          "3": {
+              "indicator" : "≥ 6 event or DEX retweets per month",
+              "description": "Provides consistent baseline promotion"
+          }
+      }
+  },
+  {
+      "persona": "The Engager",
+      "traits_matched": ["Community engagement", "conversation building", "feedback loops"],
+      "motivations": ["Spark meaningful dialogue, collect community insights, and strengthen connections"],
+      "content_signal": ["Polls", "prompts", "open-ended questions", "conversational replies"],
+      "tier": {
+          "1": {
+              "indicator" : "≥ 4 polls/threads with ≥ 100 responses",
+              "description": "Generates high-impact discussions"
+          },
+          "2": {
+              "indicator" : "≥ 25 thoughtful replies to community prompts",
+              "description": "Adds substance and depth to ongoing conversations"
+          },
+          "3": {
+              "indicator" : "≥ 40 light replies (≈ 1–2 per day)",
+              "description": "Keeps discussions flowing with frequent participation"
+          }
+      }
+  },
+  {
+      "persona": "The Guardian",
+      "traits_matched": ["Security", "risk management", "DEX/DeFi protection"],
+      "motivations": ["Protect users, amplify risk alerts, and safeguard the ecosystem’s trust"],
+      "content_signal": ["Security warnings", "scam alerts", "audit highlights", "safe trading tips"],
+      "tier": {
+          "1": {
+              "indicator" : "≥ 2 original risk alerts/DEX safety insights",
+              "description": "Proactively creates safety-first content"
+          },
+          "2": {
+              "indicator" : "≥ 6 reshared security/DEX alerts (≈ 1–2 per week)",
+              "description": "Amplifies alerts to keep community aware"
+          },
+          "3": {
+              "indicator" : "≥ 3 safety retweets per month",
+              "description": "Plays a steady supporting role in safety promotion"
+          }
+      }
+  },
+  {
+      "persona": "The Visionary",
+      "traits_matched": ["Future-facing leadership", "AI", "MetaFi", "Gaming", "DeFi adoption"],
+      "motivations": ["Inspire the community with cross-domain vision and frontier thinking"],
+      "content_signal": ["AI x Web3 insights", "metaverse innovations", "cross-sector thought leadership"],
+      "tier": {
+          "1": {
+              "indicator" : "Shares ≥ 2 original visionary threads (AI, MetaFi, Gaming)",
+              "description": "Pushes bold ideas about the Web3 future"
+          },
+          "2": {
+              "indicator" : "Hosts ≥ 2 cross-sector events or AMAs per quarter",
+              "description": "Leads cross-domain conversations and adoption"
+          },
+          "3": {
+              "indicator" : "Retweets ≥ 10 thought-leadership posts per month",
+              "description": "Amplifies forward-looking insights consistently"
+          }
+      }
+  }
+]

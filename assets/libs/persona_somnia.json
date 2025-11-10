@@ -1,0 +1,58 @@
+[
+  {
+      "persona": "The Builder",
+      "traits_matched": ["Network Performance", "Developer Resources", "Blockchain Philosophy"],
+      "motivations": ["Build", "testnet explore", "SDK", "tech stack depth"],
+      "content_signal": ["Tweets about TPS", "contracts", "toolkits", "infra"],
+      "tier": {
+          "1": ["Open-source contributor", "hackathon winner", "SDK tester"],
+          "2": ["Shares tutorials", "explains architecture", "builds test projects"],
+          "3": ["Retweets dev content", "mild on-chain curiosity"]
+      }
+  },
+  {
+      "persona": "The Gamer",
+      "traits_matched": ["Web3 Gaming", "Product Milestones"],
+      "motivations": ["Explore game drops", "participate in tournaments", "collect NFTs"],
+      "content_signal": ["Game updates", "streaming", "clips", "achievements"],
+      "tier": {
+          "1": ["Hosts content", "game alpha/beta tester"],
+          "2": ["Shares gameplay or guides", "replies to game tweets"],
+          "3": ["Likes/RTs gaming content", "passive enjoyer"]
+      }
+  },
+  {
+      "persona": "The Community Champion",
+      "traits_matched": ["Community Interaction", "General Engagement"],
+      "motivations": ["Be seen", "participate", "grow within the Somnia culture"],
+      "content_signal": ["Contest tweets", "memes", "event responses", "community hashtags"],
+      "tier": {
+          "1": ["Hosts meme wars", "co-manages fan account"],
+          "2": ["Active in replies", "starts discussions"],
+          "3": ["Casual RTer", "uses tags like #Somniacs or #gSomnia"]
+      }
+  },
+  {
+      "persona": "The Ecosystem Analyst",
+      "traits_matched": ["Ecosystem Partnerships", "Industry Events"],
+      "motivations": ["Understand macro trends", "identify opportunities"],
+      "content_signal": ["Threads on partnerships", "breakdowns of Somnia+X collabs"],
+      "tier": {
+          "1": ["Writes Substack/research", "references whitepapers"],
+          "2": ["Comments on deals", "adds takes on collabs"],
+          "3": ["Retweets partnership news", "drops small thoughts"]
+      }
+  },
+  {
+      "persona": "The Advocate/Visionary",
+      "traits_matched": ["Leadership Presence", "Blockchain Philosophy"],
+      "motivations": ["Drive impact", "shape adoption", "narrative-first"],
+      "content_signal": ["Tweets about decentralization", "ethics", "future vision"],
+      "tier": {
+          "1": ["Keynote speaker", "founder", "podcast guest"],
+          "2": ["Reflects on philosophy", "supports founders publicly"],
+          "3": ["Echoes mission-driven quotes or thoughts"]
+      }
+  }
+
+]
