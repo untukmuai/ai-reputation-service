@@ -7,6 +7,8 @@ import os
 
 from enum import Enum
 
+CLIENT = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
 class PersonaChain(Enum):
     BNB='bnb'
     SOMNIA='somnia'
@@ -18,12 +20,13 @@ class PersonaService:
     async def get_persona(payload: RequestSortingHat, chain: PersonaChain):
         try:
             texts_dna = orjson.dumps(payload.digital_dna)
-            client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
             if chain == PersonaChain.BNB:
                 persona_config = libs_loader.get_raw('persona_bnb')
             elif chain == PersonaChain.SOMNIA:
                 persona_config = libs_loader.get_raw('persona_somnia')
+            else:
+                raise ValueError(f"Unsupported persona chain: {chain}")
 
             if not payload.old_persona:
                 prompt = f"""
@@ -60,7 +63,7 @@ class PersonaService:
                         """
 
 
-            response = await client.chat.completions.create(
+            response = await CLIENT.chat.completions.create(
             model="gpt-4o-mini",
             response_format={"type": "json_object"},
             messages=[
