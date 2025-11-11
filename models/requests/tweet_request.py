@@ -62,3 +62,7 @@ class TweetUserData(BaseModel, Body):
     location: Optional[str]
     public_metrics: TweetPublicMetrics
     tweets: List[Tweets]
+
+class RequestAnalyzeTweet(BaseModel, Body):
+    tweet_text: str
+    author: str

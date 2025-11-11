@@ -1,15 +1,23 @@
-
-
-import json
-from models.requests.dna_request import RequestDigitalDNA
-from models.responses.base_response import BaseResponse, ErrorResponse
-from utils.text_cleaner import emoji_to_codepoints, codepoints_to_emoji, truncate_by_tokens
+import os
+from openai import AsyncOpenAI
+from models.requests.dna_request import RequestDigitalDNA, RequestDigitalDNAImage
+from utils.image_helper import get_average_hex_color
+from utils.text_cleaner import emoji_to_codepoints
 from google import genai
 from google.genai.types import HarmCategory, HarmBlockThreshold
-from google.genai.client import Models
-from typing import List
-import os
 import orjson
+import requests
+from PIL import Image
+from rembg import remove
+from io import BytesIO
+import base64
+
+SAFETY_SETTINGS = [
+    {"category": HarmCategory.HARM_CATEGORY_HATE_SPEECH, "threshold": HarmBlockThreshold.BLOCK_NONE},
+    {"category": HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, "threshold": HarmBlockThreshold.BLOCK_NONE},
+    {"category": HarmCategory.HARM_CATEGORY_HARASSMENT, "threshold": HarmBlockThreshold.BLOCK_NONE},
+    {"category": HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, "threshold": HarmBlockThreshold.BLOCK_NONE},
+]
 
 class DNAService:
 
@@ -36,13 +44,6 @@ class DNAService:
             ]
 
             texts_dumps = orjson.dumps(texts)
-            #vertex ai
-            SAFETY_SETTINGS = [
-                {"category": HarmCategory.HARM_CATEGORY_HATE_SPEECH, "threshold": HarmBlockThreshold.BLOCK_NONE},
-                {"category": HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, "threshold": HarmBlockThreshold.BLOCK_NONE},
-                {"category": HarmCategory.HARM_CATEGORY_HARASSMENT, "threshold": HarmBlockThreshold.BLOCK_NONE},
-                {"category": HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, "threshold": HarmBlockThreshold.BLOCK_NONE},
-            ]
 
             response_schema = {
                 "type": "ARRAY",
@@ -292,3 +293,58 @@ class DNAService:
         except Exception as e:
             raise e
 
+    @staticmethod
+    async def generate_dna_image(payload: RequestDigitalDNAImage) -> str:
+        try:
+            prompt = f"""You are a visual design AI trained to generate stylized gamified badge icons. Your task is to create a descriptive visual concept for a badge icon based on the input title, using the style described below.
+
+            **Style Guide:**
+            - Modern, 3D-styled hexagon or shield-shaped badge
+            - Glowing gradients and high contrast colors
+            - Smooth shadows and lighting effects
+            - Symbolic, fantasy-style icon in the center (e.g. wand, wings, vault, camera)
+            - Progress bar or visual indicator optional
+            - Similar to mobile RPG/UI badges or NFT gamification
+
+            **Input Title:** {payload.title}
+
+            **Instructions:**
+            1. Identify a metaphor or symbol to represent the input (e.g., “wand” for DeFi = magical finance).
+            2. Suggest a color palette that matches the concept (e.g., green for finance, blue for trust).
+            3. Describe the icon’s shape and what’s in the center (e.g., golden shield with a glowing lamp).
+            4. Match the polished, glowing 3D style with fantasy or futuristic elements.
+            5. Output a concise description suitable for an image generation AI prompt.
+
+            **Example Output for “Personal Finance Advisor”:**  
+            A polished blue hexagonal badge with a glowing golden winged lamp in the center, symbolizing guidance and trust. Smooth gradient from dark to electric blue, accented with sparkles. The icon has a soft shadow, glowing edges, and resembles a gamified digital achievement badge."""
+            client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+
+            response = await client.images.generate(
+                model="dall-e-3",
+                prompt=prompt,
+                size="1024x1024",
+                quality="standard",
+                n=1,
+            )
+
+            response = requests.get(response.data[0].url)
+            response.raise_for_status()
+
+            input_image = Image.open(BytesIO(response.content))
+            nobg_image = remove(input_image)
+
+            average_hex = get_average_hex_color(nobg_image)
+
+            buffer = BytesIO()
+            nobg_image.save(buffer, format="PNG")
+            buffer.seek(0)
+            image_b64 = base64.b64encode(buffer.read()).decode('utf-8')
+            
+            image = {
+                "image_b64": image_b64,
+                "background_hex": average_hex
+            }
+
+            return image
+        except Exception as e:
+            raise e

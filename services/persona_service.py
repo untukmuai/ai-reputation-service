@@ -1,13 +1,12 @@
+import os
 from models.requests.persona_request import RequestSortingHat
 from models.responses.base_response import BaseResponse, ErrorResponse
 from utils.libs_loader import libs_loader
 import orjson
 from openai import AsyncOpenAI
-import os
 
 from enum import Enum
 
-CLIENT = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 class PersonaChain(Enum):
     BNB='bnb'
@@ -62,8 +61,8 @@ class PersonaService:
                         }}
                         """
 
-
-            response = await CLIENT.chat.completions.create(
+            client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+            response = await client.chat.completions.create(
             model="gpt-4o-mini",
             response_format={"type": "json_object"},
             messages=[

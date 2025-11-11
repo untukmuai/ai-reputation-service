@@ -10,3 +10,6 @@ class RequestDigitalDNA(BaseModel, Body):
     socmed_data: TweetUserData
     unique_id: List[str]
     title: List[str]
+
+class RequestDigitalDNAImage(BaseModel, Body):
+    title: str
