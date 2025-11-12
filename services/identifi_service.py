@@ -14,7 +14,6 @@ class IdentifiScore:
     @staticmethod
     async def calculate_identifi_log(payload: RequestIdentifiScore):
         try:
-            followers_count = payload.public_metrics.followers_count
             avg_views    = round(mean(i.views if i.views is not None else 0 for i in payload.tweets))
             avg_likes    = round(mean(i.likes if i.likes is not None else 0 for i in payload.tweets))
             avg_replies  = round(mean(i.replies if i.replies is not None else 0 for i in payload.tweets))
@@ -29,7 +28,7 @@ class IdentifiScore:
 
 
             #network/social score calc
-            follower_score = (math.log10(payload.public_metrics.followers_count) + 1) * 50
+            follower_score = (math.log10(payload.public_metrics.followers_count + 1)) * 50
             view_score =  (math.log10(avg_views + 1)) * 50
             social_score = follower_score + view_score
 
@@ -56,7 +55,7 @@ class IdentifiScore:
 
             return {
                 "social_score": {
-                    "followers_count": followers_count,
+                    "followers_count": payload.public_metrics.followers_count,
                     "avg_views": avg_views,
                     "final": social_score,
                     # "log_social_score": log_social_score,
@@ -84,4 +83,5 @@ class IdentifiScore:
                 # "log_identifi_score": log_social_score + log_reputation_score + total_onchain_score + log_governance_score
             }
         except Exception as e:
+            print(str(e))
             raise e
