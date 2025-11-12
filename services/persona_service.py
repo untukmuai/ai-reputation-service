@@ -4,8 +4,10 @@ from models.responses.base_response import BaseResponse, ErrorResponse
 from utils.libs_loader import libs_loader
 import orjson
 from openai import AsyncOpenAI
-
+import logging
 from enum import Enum
+
+logger = logging.getLogger(__name__)
 
 
 class PersonaChain(Enum):
@@ -84,5 +86,6 @@ class PersonaService:
             description['tier'] = int(description['tier'])
             return description
         except Exception as e:
-            raise e
+            logger.exception("get_persona_err: %s", e)
+            raise 
     

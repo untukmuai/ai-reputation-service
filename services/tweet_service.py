@@ -3,6 +3,10 @@ from google import genai
 from google.genai.types import HarmBlockThreshold, HarmCategory
 from models.requests.tweet_request import RequestAnalyzeTweet
 import orjson
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 SAFETY_SETTINGS = [
     {"category": HarmCategory.HARM_CATEGORY_HATE_SPEECH, "threshold": HarmBlockThreshold.BLOCK_NONE},
@@ -71,4 +75,5 @@ class TweetService:
                 **response_text_dict
             }
         except Exception as e:
-            raise e
+            logger.exception("analyze_single_tweet_err: %s", e)
+            raise

@@ -11,6 +11,9 @@ from PIL import Image
 from rembg import remove
 from io import BytesIO
 import base64
+import logging
+
+logger = logging.getLogger(__name__)
 
 SAFETY_SETTINGS = [
     {"category": HarmCategory.HARM_CATEGORY_HATE_SPEECH, "threshold": HarmBlockThreshold.BLOCK_NONE},
@@ -291,6 +294,7 @@ class DNAService:
                 "new_dna": new_dna
             }
         except Exception as e:
+            logger.exception("digital_dna_genai_err: %s", e)
             raise e
 
     @staticmethod
@@ -347,4 +351,5 @@ class DNAService:
 
             return image
         except Exception as e:
-            raise e
+            logger.exception("generate_dna_image_err: %s", e)
+            raise
