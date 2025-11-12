@@ -1,11 +1,11 @@
-
-
-
+import logging
 import math
 from statistics import mean
 from models.requests.identifi_request import RequestIdentifiScore
 from models.responses.base_response import BaseResponse, ErrorResponse
 from services.somnia_referral_service import SomniaReferralService
+
+logger = logging.getLogger(__name__)
 
 
 class IdentifiScore:
@@ -83,5 +83,5 @@ class IdentifiScore:
                 # "log_identifi_score": log_social_score + log_reputation_score + total_onchain_score + log_governance_score
             }
         except Exception as e:
-            print(str(e))
-            raise e
+            logger.exception("calculate_identifi_log_err: %s", e)
+            raise 
