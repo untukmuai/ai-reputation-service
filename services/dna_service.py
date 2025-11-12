@@ -40,10 +40,10 @@ class DNAService:
                     "likes": i.likes,
                     "replies": i.replies,
                     "retweets": i.retweets,
-                    "views": i.views or 0,  # More pythonic
+                    "views": i.views or 0,  
                     "timeParsed": i.timeParsed,
                 }
-                for i in tw  # List comprehension is faster
+                for i in tw
             ]
 
             texts_dumps = orjson.dumps(texts)
@@ -126,9 +126,15 @@ class DNAService:
                 }
             }
             client = genai.Client(api_key=os.getenv('GENAI_API_KEY'))
+            tweet_count = len(texts)
+
+            dna_generated_count = 10
+
+            if tweet_count < 10 and tweet_count > 0:
+                dna_generated_count = tweet_count
             
             # Strategy: Sample-based estimation for large datasets
-            if len(texts) > 100:
+            if tweet_count > 100:
                 # Take a sample to estimate average tokens per tweet
                 sample_size = min(50, len(texts))
                 sample_texts = texts[:sample_size]
@@ -193,7 +199,7 @@ class DNAService:
             prompt_instruction = thousand_prompt if use_truncated else usual_prompt
             title_content = title_str[:1000] if use_truncated else title_str
 
-            text_prompt = f"""Analyze these tweets and identify up to 10 distinct personality/content DNA traits.
+            text_prompt = f"""Analyze these tweets and identify {dna_generated_count} distinct personality/content DNA traits.
             
             Tweets:
             {texts_dumps}
@@ -203,7 +209,7 @@ class DNAService:
             2. Avoid semantic redundancy - reuse existing categories if meaning matches
             {prompt_instruction}
             {title_content}
-            3. If fewer than 10 tweets, create one trait per tweet
+            3. Identify {dna_generated_count} distict traits
             4. Percentages must total exactly 100%
             5. Each trait needs: category, description (1 paragraph), percentage, sample tweet with metrics, and 2 insights
 
