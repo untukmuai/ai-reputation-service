@@ -25,7 +25,7 @@ class PersonaController:
             
             success_response = BaseResponse(
                 success=True,
-                message="Data generated successfully",
+                message="OK",
                 data=result
             )
             return Response(
@@ -54,7 +54,7 @@ class PersonaController:
             
             success_response = BaseResponse(
                 success=True,
-                message="Data generated successfully",
+                message="OK",
                 data=result
             )
             return Response(

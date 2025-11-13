@@ -1,11 +1,14 @@
+import os
 from models.requests.persona_request import RequestSortingHat
 from models.responses.base_response import BaseResponse, ErrorResponse
 from utils.libs_loader import libs_loader
 import orjson
 from openai import AsyncOpenAI
-import os
-
+import logging
 from enum import Enum
+
+logger = logging.getLogger(__name__)
+
 
 class PersonaChain(Enum):
     BNB='bnb'
@@ -18,12 +21,13 @@ class PersonaService:
     async def get_persona(payload: RequestSortingHat, chain: PersonaChain):
         try:
             texts_dna = orjson.dumps(payload.digital_dna)
-            client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
             if chain == PersonaChain.BNB:
                 persona_config = libs_loader.get_raw('persona_bnb')
             elif chain == PersonaChain.SOMNIA:
                 persona_config = libs_loader.get_raw('persona_somnia')
+            else:
+                raise ValueError(f"Unsupported persona chain: {chain}")
 
             if not payload.old_persona:
                 prompt = f"""
@@ -59,7 +63,7 @@ class PersonaService:
                         }}
                         """
 
-
+            client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
             response = await client.chat.completions.create(
             model="gpt-4o-mini",
             response_format={"type": "json_object"},
@@ -82,5 +86,6 @@ class PersonaService:
             description['tier'] = int(description['tier'])
             return description
         except Exception as e:
-            raise e
+            logger.exception("get_persona_err: %s", e)
+            raise 
     
