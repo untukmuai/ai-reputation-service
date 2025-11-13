@@ -50,7 +50,7 @@ class DNAService:
 
             response_schema = {
                 "type": "ARRAY",
-                "description": "Given the user tweets, provide 10 categories(1-2 words) and its percentage sum up to 100% in total. Provide also example of the tweet, and 2 insights. If user's tweets less than 10, category created will be the same number like the number of tweets user's",
+                "description": "Given the user tweets, provide categories(1-2 words) and its percentage sum up to 100% in total. Provide also example of the tweet, and 2 insights.",
                 "items": {
                     "type": "OBJECT",
                     "properties": {
@@ -209,7 +209,7 @@ class DNAService:
             2. Avoid semantic redundancy - reuse existing categories if meaning matches
             {prompt_instruction}
             {title_content}
-            3. Identify {dna_generated_count} distict traits
+            3. You should identify and output {dna_generated_count} distinct traits
             4. Percentages must total exactly 100%
             5. Each trait needs: category, description (1 paragraph), percentage, sample tweet with metrics, and 2 insights
 
