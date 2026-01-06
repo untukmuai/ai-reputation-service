@@ -18,12 +18,46 @@ class IdentifiController:
         openapi_tags=["Identifi Score"], 
         openapi_name="Get identifi score logarithmic")(self.get_identifi_score_log)
 
+        self.app.post("/api/identifi/v2", 
+        openapi_tags=["Identifi Score"], 
+        openapi_name="Get identifi score v2")(self.get_identifi_score_v2)
+
     async def get_identifi_score_log(self, request: Request, body: RequestIdentifiScore) -> Response:
         try:
             # payload = orjson.loads(request.body)
             payload_body = orjson.loads(body)
             validated_payload =  RequestIdentifiScore(**payload_body)
             result = await IdentifiScore.calculate_identifi_log(validated_payload)
+            
+            success_response = BaseResponse(
+                success=True,
+                message="OK",
+                data=result
+            )
+            return Response(
+                status_code=200,
+                headers={"Content-Type": "application/json"},
+                description=orjson.dumps(success_response.dict())
+            )  
+        except Exception as e:
+            error_response = ErrorResponse(
+                success=False,
+                message="Internal server error",
+                error_code="INTERNAL_ERROR",
+                details={"error": str(e)}
+            )
+            return Response(
+                status_code=500,
+                headers={"Content-Type": "application/json"},
+                description=orjson.dumps(error_response.dict())
+            )
+
+    async def get_identifi_score_v2(self, request: Request, body: RequestIdentifiScore) -> Response:
+        try:
+            # payload = orjson.loads(request.body)
+            payload_body = orjson.loads(body)
+            validated_payload =  RequestIdentifiScore(**payload_body)
+            result = await IdentifiScore.calculate_identifi_v2(validated_payload)
             
             success_response = BaseResponse(
                 success=True,
