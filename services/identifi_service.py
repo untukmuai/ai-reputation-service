@@ -1,7 +1,7 @@
 import logging
 import math
 from statistics import mean
-from models.requests.identifi_request import RequestIdentifiScore
+from models.requests.identifi_request import RequestIdentifiScore, RequestIdentifiScoreV2
 from models.requests.tweet_request import Tweets
 from models.responses.base_response import BaseResponse, ErrorResponse
 from services.identifi_util_service import IdentifiScoreUtil
@@ -275,7 +275,7 @@ class IdentifiScore:
         return float(1 / (1 + math.exp(-z)))
 
     @staticmethod
-    async def calculate_identifi_v2(payload: RequestIdentifiScore):
+    async def calculate_identifi_v2(payload: RequestIdentifiScoreV2):
         try:
             t0 = time.time()
 
@@ -351,7 +351,18 @@ class IdentifiScore:
             engagement_score = round(math.log(sum_engagement + 1) * 75, 2)
 
             #feedback score
+            feedback_score = 0
 
+            if payload.voters:
+                feedback_weight_sum = 0
+                feedback_value = 0
+                for voter in payload.voters:
+                    weight = math.log(voter.followers + 10) * math.sqrt(voter.twitter_account_age_days / 30) * voter.quality_score
+                    feedback_weight_sum += weight
+                    value = 1 if voter.vote == "up" else -1
+                    feedback_value += value * weight 
+                    
+                feedback_score = feedback_value / feedback_weight_sum
 
             # quality score
             originality_score = round((original_count / tweet_len) * 100, 2)
@@ -404,6 +415,9 @@ class IdentifiScore:
                     "sum_engagement": sum_engagement,
                     "overall": engagement_score
                 },
+                "feedback": {
+                    "overall": feedback_score,
+                },
                 "quality": {
                     "content_score": {
                         "media_richness": media_richness_score,
@@ -411,8 +425,8 @@ class IdentifiScore:
                         "overall": content_score
                     },
                     "behaviour_score": {
-                        "spam_penalty": spam_penalty,
-                        "spammy_link": spammy_link_score,
+                        "spam_tweet_penalty": spam_penalty,
+                        "spam_keyword_penalty": spammy_link_score,
                         "originality": originality_score,
                         "overall": behaviour_score
                     },
@@ -420,7 +434,9 @@ class IdentifiScore:
                 },
                 "onchain":{
                     "referral": referral_score,
-                    "badges": badges_score,
+                    "badges_minted_count": payload.badges_minted,
+                    "badges_reward_accumulated": payload.total_badges_reward,
+                    "badges_score": badges_score,
                     "overall": on_chain_score
                 },
                 "identifi": identifi_score,
