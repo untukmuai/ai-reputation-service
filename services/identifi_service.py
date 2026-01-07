@@ -325,7 +325,10 @@ class IdentifiScore:
                     print(f"{tweet.text} || SIM SCORE: {sim_score}")
                     if sim_score >= IdentifiScore.SIMILARITY_SPAM_THRESHOLDS:
                         spam_sim_arr.append(sim_score)
-                        spam_sim_tweets_arr.append(tweet.text)
+                        spam_sim_tweets_arr.append({
+                            "tweet": tweet.text,
+                            "id": tweet.id
+                        })
 
                     spammy_link_score += IdentifiScore.get_link_spam_score(tweet.text)
                     original_count += 1
