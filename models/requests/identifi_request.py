@@ -6,21 +6,21 @@ from typing_extensions import Literal
 
 from models.requests.tweet_request import TweetUserData
 
-class BaseFeedbackScorePayload(Body):
+class BaseFeedbackScorePayload(BaseModel, Body):
     followers: int
     vote: Literal["up", "down"]
     twitter_account_age_days: int
-    quality_score: str
+    quality_score: float
 
 
-class RequestIdentifiScore(TweetUserData, Body):
+class RequestIdentifiScore(TweetUserData):
     #...other TweetUserData model fields
     address: Optional[str]
     badges_minted: int
     quest_completed: int 
     total_badges_reward: int
 
-class RequestIdentifiScoreV2(TweetUserData, Body):
+class RequestIdentifiScoreV2(TweetUserData):
     #...other TweetUserData model fields
     voters: Optional[List[BaseFeedbackScorePayload]]
     address: Optional[str]
