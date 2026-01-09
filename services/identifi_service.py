@@ -312,14 +312,14 @@ class IdentifiScore:
                 image_count += len(tweet.photos)
                 video_count += len(tweet.videos)
 
-                # engagement
-                views_count += tweet.views
-                likes_count += tweet.likes
-                retweets_count += tweet.retweets
-                replies_count += tweet.replies
-
                 # spam link, originality, text detect collection
                 if tweet.isRetweet == False:
+                    # engagement
+                    views_count += tweet.views
+                    likes_count += tweet.likes
+                    retweets_count += tweet.retweets
+                    replies_count += tweet.replies
+
                     # spam similarity score
                     sim_score = IdentifiScore.get_spam_score(tweet.text, index, tfidf_matrix, embed_matrix, embedder, tfidf)
                     print(f"{tweet.text} || SIM SCORE: {sim_score}")
@@ -336,10 +336,10 @@ class IdentifiScore:
 
                 # elapsed_ms = (time.time() - start_time) * 1000
 
-            avg_views = views_count / tweet_len
-            avg_likes = likes_count / tweet_len
-            avg_retweets = retweets_count / tweet_len
-            avg_replies = replies_count / tweet_len
+            avg_views = views_count / original_count
+            avg_likes = likes_count / original_count
+            avg_retweets = retweets_count / original_count
+            avg_replies = replies_count / original_count
 
             # network score
             follower_score = round(math.log(payload.public_metrics.followers_count + 1) * 50, 2)
