@@ -16,7 +16,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer, util
 import time
 import orjson
+import os
 
+os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 logger = logging.getLogger(__name__)
 
