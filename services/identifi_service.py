@@ -15,6 +15,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer, util
 import time
+import orjson
 
 
 logger = logging.getLogger(__name__)
@@ -238,28 +239,27 @@ class IdentifiScore:
     @staticmethod
     def prepare_spam_features(tweets_list, embedder, tfidf):
         tfidf_matrix = tfidf.fit_transform(tweets_list)
-        embed_matrix = embedder.encode(tweets_list, normalize_embeddings=True)
+        embed_matrix = embedder.encode(tweets_list, normalize_embeddings=True, show_progress_bar=False)
         return tfidf_matrix, embed_matrix
     
     @staticmethod
     def get_spam_score(current_tweet, index, tfidf_matrix, embed_matrix, embedder, tfidf):
-        # Compute TF-IDF similarity for all tweets
         current_tfidf = tfidf.transform([current_tweet])
         sims_tfidf = cosine_similarity(current_tfidf, tfidf_matrix)[0]
 
-        # Exclude self
+        # exclude curr tweet tfidf
         sims_tfidf[index] = -1
         sim_tfidf = sims_tfidf.max()
 
-        # Embedding similarity
-        current_embed = embedder.encode([current_tweet], normalize_embeddings=True)
+        # embedding similarity
+        current_embed = embedder.encode([current_tweet], normalize_embeddings=True, show_progress_bar=False)
         sims_embed = util.cos_sim(current_embed, embed_matrix).cpu().numpy()[0]
 
-        # Exclude self
+        # exclude curr tweet similarity
         sims_embed[index] = -1
         sim_embed = sims_embed.max()
 
-        # Penalties
+        # penalties
         freq_penalty = float((sim_tfidf + sim_embed) / 2 > 0.75)
 
         text_len = len(current_tweet)
@@ -276,6 +276,7 @@ class IdentifiScore:
 
     @staticmethod
     async def calculate_identifi_v2(payload: RequestIdentifiScoreV2):
+        logger.info(f'IDENTIFI_SCORE_V2 {payload.username} START')
         try:
             t0 = time.time()
 
@@ -322,7 +323,7 @@ class IdentifiScore:
 
                     # spam similarity score
                     sim_score = IdentifiScore.get_spam_score(tweet.text, index, tfidf_matrix, embed_matrix, embedder, tfidf)
-                    print(f"{tweet.text} || SIM SCORE: {sim_score}")
+                    # print(f"{tweet.text} || SIM SCORE: {sim_score}")
                     if sim_score >= IdentifiScore.SIMILARITY_SPAM_THRESHOLDS:
                         spam_sim_arr.append(sim_score)
                         spam_sim_tweets_arr.append({
@@ -336,10 +337,18 @@ class IdentifiScore:
 
                 # elapsed_ms = (time.time() - start_time) * 1000
 
-            avg_views = views_count / original_count
-            avg_likes = likes_count / original_count
-            avg_retweets = retweets_count / original_count
-            avg_replies = replies_count / original_count
+            avg_views = 0
+            avg_likes = 0
+            avg_retweets = 0
+            avg_replies = 0
+
+            if original_count > 0:
+                avg_views = views_count / original_count
+                avg_likes = likes_count / original_count
+                avg_retweets = retweets_count / original_count
+                avg_replies = replies_count / original_count
+            else:
+                logger.info(f'IDENTIFI_SCORE_V2 {payload.username} has 0 original tweet. average engagement metric set to 0')
 
             # network score
             follower_score = round(math.log(payload.public_metrics.followers_count + 1) * 50, 2)
@@ -375,11 +384,13 @@ class IdentifiScore:
                 spam_penalty = -(max(0, avg_sim - IdentifiScore.SIMILARITY_SPAM_THRESHOLDS) / (1 - IdentifiScore.SIMILARITY_SPAM_THRESHOLDS)) * 100
             else:
                 spam_penalty = 0
-                print(f"{spam_penalty}")
+                # print(f"{spam_penalty}")
 
             # spam_penalty = max(spam_penalty, -(tweet_len / 2)) enable if want to be capped
 
             spammy_link_score *= 100
+            spam_penalty = round(spam_penalty, 2)
+            spammy_link_score = round(spammy_link_score, 2)
             behaviour_score = originality_score + spam_penalty + spammy_link_score
             quality_score = round(content_score + behaviour_score, 2)
 
@@ -403,7 +414,7 @@ class IdentifiScore:
             identifi_score = round(network_score + engagement_score + quality_score + on_chain_score, 2)
 
             finished_ms = (time.time() - t0) * 1000
-            logger.info(f"IDENTIFI_SCORE_V2 FINISHED for {payload.username} - {tweet_len} tweets completed in {finished_ms:.2f} ms\n")
+            logger.info(f"IDENTIFI_SCORE_V2 {payload.username} FINISHED in {finished_ms:.2f} ms\n")
 
             return {
                 "network": {
@@ -433,7 +444,7 @@ class IdentifiScore:
                     "overall": quality_score
                 },
                 "onchain":{
-                    "referral": referral_score,
+                    "referral": referral_count,
                     "badges_minted_count": payload.badges_minted,
                     "badges_reward_accumulated": payload.total_badges_reward,
                     "badges_score": badges_score,
@@ -445,5 +456,5 @@ class IdentifiScore:
                 }
             }
         except Exception as e:
-            logger.exception("calculate_identifi_v2: %s", e)
+            logger.exception(f"IDENTIFI_SCORE_V2_ERR {payload.username} {e}")
             raise
