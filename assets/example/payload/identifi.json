@@ -3394,5 +3394,6 @@
   "address": "0x294b43cd297ff740be28e441d5820f8a29748a12",
   "badges_minted": 0,
   "quest_completed": 65,
-  "total_badges_reward": 1012
+  "total_badges_reward": 1012,
+  "voters": []
 }
