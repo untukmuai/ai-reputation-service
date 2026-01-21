@@ -16,7 +16,9 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer, util
 import time
 import orjson
+import os
 
+os.environ['CUDA_VISIBLE_DEVICES'] = ''
 
 logger = logging.getLogger(__name__)
 
@@ -43,6 +45,7 @@ class IdentifiScore:
     MEDIA_RICHNESS_WEIGHT = {"image": 0.3, "video": 0.6}
 
     SIMILARITY_SPAM_THRESHOLDS = 0.9
+    SPAM_PENALTY_MULTIPLIER = 10
 
     @staticmethod
     async def calculate_identifi_log(payload: RequestIdentifiScore):
@@ -280,7 +283,15 @@ class IdentifiScore:
         try:
             t0 = time.time()
 
-            tweet_obj_list = payload.tweets
+            tweet_obj_list = []
+            seen_tweet_ids = set()
+
+            # ensure unique tweet id
+            for tweet in payload.tweets:
+                if tweet.id not in seen_tweet_ids:
+                    tweet_obj_list.append(tweet)
+                    seen_tweet_ids.add(tweet.id)
+
             tweet_len = len(tweet_obj_list)
             tweets_list = []
 
@@ -298,7 +309,7 @@ class IdentifiScore:
             original_count = 0
             detect_text = ""
 
-            # First pass: collect tweet texts and clean them
+            # collect tweet texts, clean, and ensure unique tweet id
             for tweet in tweet_obj_list:
                 tweet.text = IdentifiScoreUtil.clean_tweet(tweet.text)
                 tweets_list.append(tweet.text)
@@ -306,7 +317,7 @@ class IdentifiScore:
             # Prepare spam detection features from all tweets
             tfidf_matrix, embed_matrix = IdentifiScore.prepare_spam_features(tweets_list, embedder, tfidf)
 
-            # Second pass: calculate scores
+            # calculate scores
             for index, tweet in enumerate(tweet_obj_list):
                 # content
                 readability_score += IdentifiScore.get_readability_score(tweet.text)
@@ -379,9 +390,14 @@ class IdentifiScore:
             readability_score = round(readability_score, 2)
             content_score = round(readability_score + media_richness_score, 2)
 
-            if(len(spam_sim_arr) > 0):
+            if(len(spam_sim_arr) > 0 and original_count > 0):
+                spam_ratio = len(spam_sim_arr) / original_count
                 avg_sim = sum(spam_sim_arr) / len(spam_sim_arr)
-                spam_penalty = -(max(0, avg_sim - IdentifiScore.SIMILARITY_SPAM_THRESHOLDS) / (1 - IdentifiScore.SIMILARITY_SPAM_THRESHOLDS)) * 100
+                base_penalty = -(max(0, avg_sim - IdentifiScore.SIMILARITY_SPAM_THRESHOLDS) / (1 - IdentifiScore.SIMILARITY_SPAM_THRESHOLDS)) * 100
+                count_multiplier = 1 + (spam_ratio * IdentifiScore.SPAM_PENALTY_MULTIPLIER) 
+                excess_sim = max(0, avg_sim - IdentifiScore.SIMILARITY_SPAM_THRESHOLDS)
+                exponential_factor = (excess_sim / (1 - IdentifiScore.SIMILARITY_SPAM_THRESHOLDS)) ** 2
+                spam_penalty = base_penalty * count_multiplier * (1 + exponential_factor)
             else:
                 spam_penalty = 0
                 # print(f"{spam_penalty}")
