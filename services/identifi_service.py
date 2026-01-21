@@ -354,10 +354,10 @@ class IdentifiScore:
             avg_replies = 0
 
             if original_count > 0:
-                avg_views = views_count / original_count
-                avg_likes = likes_count / original_count
-                avg_retweets = retweets_count / original_count
-                avg_replies = replies_count / original_count
+                avg_views = round(views_count / original_count, 2)
+                avg_likes = round(likes_count / original_count, 2)
+                avg_retweets = round(retweets_count / original_count, 2)
+                avg_replies = round(replies_count / original_count, 2)
             else:
                 logger.info(f'IDENTIFI_SCORE_V2 {payload.username} has 0 original tweet. average engagement metric set to 0')
 
@@ -434,11 +434,16 @@ class IdentifiScore:
 
             return {
                 "network": {
+                    "followers_count": payload.public_metrics.followers_count,
                     "follower_score": follower_score,
+                    "average_views": avg_views,
                     "view_score": view_score,
                     "overall": network_score
                 },
                 "engagement": {
+                    "average_likes": avg_likes,
+                    "average_retweets": avg_retweets,
+                    "average_replies": avg_replies,
                     "sum_engagement": sum_engagement,
                     "overall": engagement_score
                 },
