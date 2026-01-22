@@ -49,11 +49,40 @@ class IdentifiScore:
 
     @staticmethod
     async def calculate_identifi_log(payload: RequestIdentifiScore):
+        logger.info(
+            "Calculate identifi score log for %s with payload: %s",
+            payload.username,
+            json.dumps(payload.model_dump())
+        )
+
         try:
-            avg_views    = round(mean(i.views if i.views is not None else 0 for i in payload.tweets))
-            avg_likes    = round(mean(i.likes if i.likes is not None else 0 for i in payload.tweets))
-            avg_replies  = round(mean(i.replies if i.replies is not None else 0 for i in payload.tweets))
-            avg_retweets = round(mean(i.retweets if i.retweets is not None else 0 for i in payload.tweets))
+            original_post_count = 0
+            views_count = 0
+            likes_count = 0
+            replies_count = 0
+            retweets_count = 0
+
+            for i in payload.tweets:
+                if i.isRetweet == False:
+                    original_post_count += 1
+                    views_count += i.views
+                    likes_count += i.likes
+                    replies_count += i.replies
+                    retweets_count += i.retweets
+            
+            avg_views = 0
+            avg_likes = 0 
+            avg_replies = 0 
+            avg_retweets = 0
+
+            if original_post_count > 0:
+                avg_views    = round(views_count/original_post_count)
+                avg_likes    = round(likes_count/original_post_count)
+                avg_replies  = round(replies_count/original_post_count)
+                avg_retweets = round(retweets_count/original_post_count)
+            else:
+                logger.debug("calculate identifi score original post 0 for %s. avg engagement set to 0", payload.username)
+            
             badges_minted = payload.badges_minted
             quest_completed = payload.quest_completed
             referral_count = 0
