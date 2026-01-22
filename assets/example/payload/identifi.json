@@ -14,6 +14,85 @@
   "tweets": [
     {
       "bookmarkCount": 0,
+      "conversationId": "2010958538328408494",
+      "id": "2010958538328408494",
+      "hashtags": [],
+      "likes": 0,
+      "mentions": [
+        {
+          "name": "Antidepressant Content",
+          "username": "depressionlesss",
+          "id": "1255191384207888389"
+        }
+      ],
+      "name": "riqss",
+      "permanentUrl": "https://x.com/achrysanf/status/2010958538328408494",
+      "photos": [],
+      "replies": 0,
+      "retweets": 10190,
+      "text": "RT @depressionlesss: Life...\n\n https://t.co/aNGsvmKeVN",
+      "thread": [],
+      "urls": [],
+      "userId": "1139741470779269122",
+      "username": "achrysanf",
+      "videos": [
+        {
+          "id": "1966936072673275904",
+          "preview": "https://pbs.twimg.com/ext_tw_video_thumb/1966936072673275904/pu/img/eHOj50FOpWzYytVJ.jpg",
+          "url": "https://video.twimg.com/ext_tw_video/1966936072673275904/pu/pl/pUZGG3UU_7CZn9Bk.m3u8?tag=12&v=fbb"
+        }
+      ],
+      "isQuoted": false,
+      "isReply": false,
+      "isRetweet": true,
+      "isPin": false,
+      "sensitiveContent": true,
+      "timeParsed": "2026-01-13T06:14:11.000Z",
+      "timestamp": 1768284851000,
+      "html": "RT @depressionlesss: Life...\n\n https://t.co/aNGsvmKeVN",
+      "views": 0
+    },
+    {
+      "bookmarkCount": 0,
+      "conversationId": "2010228379124150365",
+      "id": "2010228379124150365",
+      "hashtags": [],
+      "likes": 0,
+      "mentions": [
+        {
+          "name": "NITESH",
+          "username": "Nitesh805181",
+          "id": "1099631860194324480"
+        }
+      ],
+      "name": "riqss",
+      "permanentUrl": "https://x.com/achrysanf/status/2010228379124150365",
+      "photos": [
+        {
+          "id": "2009944537918300160",
+          "url": "https://pbs.twimg.com/media/G-TB6HjbYAApnnk.jpg"
+        }
+      ],
+      "replies": 0,
+      "retweets": 1021,
+      "text": "RT @Nitesh805181: Display tech in a nutshell https://t.co/RnFfi3qx6l",
+      "thread": [],
+      "urls": [],
+      "userId": "1139741470779269122",
+      "username": "achrysanf",
+      "videos": [],
+      "isQuoted": true,
+      "isReply": false,
+      "isRetweet": true,
+      "isPin": false,
+      "sensitiveContent": true,
+      "timeParsed": "2026-01-11T05:52:48.000Z",
+      "timestamp": 1768110768000,
+      "html": "RT @Nitesh805181: Display tech in a nutshell https://t.co/RnFfi3qx6l",
+      "views": 0
+    },
+    {
+      "bookmarkCount": 0,
       "conversationId": "2005166351602839578",
       "id": "2005166351602839578",
       "hashtags": [],
@@ -29,7 +108,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/2005166351602839578",
       "photos": [],
       "replies": 0,
-      "retweets": 1509,
+      "retweets": 1553,
       "text": "RT @MikaelDewabrata: Saya ringkas kejadian-kejadian yang memengaruhi harga RAM melejit.\n\n- Sam Altman udah ngunci 40% supply DRAM di Oktobe…",
       "thread": [],
       "urls": [],
@@ -63,7 +142,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/2005165624335761868",
       "photos": [],
       "replies": 0,
-      "retweets": 3076,
+      "retweets": 3039,
       "text": "RT @naiivememe: this is so real 😭https://t.co/bxKAD4bVrZ",
       "thread": [],
       "urls": [],
@@ -103,7 +182,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/2003057681196896278",
       "photos": [],
       "replies": 0,
-      "retweets": 305,
+      "retweets": 302,
       "text": "RT @e_opore: LINUX SHELL &amp; BASH SCRIPTING CHEATSHEET https://t.co/a1Z9lMZ5zq",
       "thread": [],
       "urls": [],
@@ -142,7 +221,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 1799,
+      "retweets": 1772,
       "text": "RT @ShitpostGate: https://t.co/WKDCocTfqd",
       "thread": [],
       "urls": [],
@@ -181,7 +260,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 249,
+      "retweets": 247,
       "text": "RT @lynk0x: https://t.co/8tTEyRNCIu",
       "thread": [],
       "urls": [],
@@ -224,7 +303,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 13430,
+      "retweets": 13332,
       "text": "RT @LegitTargets: 🚨🇨🇳 BREAKING: CHINA has RE-FORESTED an area the size of Japan in only 20 years https://t.co/7nP21Wsuds",
       "thread": [],
       "urls": [],
@@ -258,7 +337,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/1968172418922582430",
       "photos": [],
       "replies": 0,
-      "retweets": 2807,
+      "retweets": 2790,
       "text": "RT @FFVV1211: Girls: men have no fear\n\nThe fear: https://t.co/nppMEas5NV",
       "thread": [],
       "urls": [],
@@ -303,7 +382,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 23512,
+      "retweets": 23413,
       "text": "RT @warungsastra: https://t.co/nPQXDfwQba",
       "thread": [],
       "urls": [],
@@ -337,7 +416,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/1965292405789524363",
       "photos": [],
       "replies": 0,
-      "retweets": 37644,
+      "retweets": 37461,
       "text": "RT @Dwynna_Win: Indonesia, Philippines, Kenya, Nepal \n\n🤝\n\nfighting corrupt government",
       "thread": [],
       "urls": [],
@@ -376,7 +455,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 34018,
+      "retweets": 33915,
       "text": "RT @papaojol: WORLD IS WATCHING! https://t.co/aMjlAnyEW8",
       "thread": [],
       "urls": [],
@@ -415,7 +494,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 571,
+      "retweets": 569,
       "text": "RT @naiivememe: https://t.co/jGHmD0bcot",
       "thread": [],
       "urls": [],
@@ -457,7 +536,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 31191,
+      "retweets": 31026,
       "text": "RT @rahmdess27: #ResetIndonesia \n#IndonesiaGelap https://t.co/fOIbql77jS",
       "thread": [],
       "urls": [],
@@ -491,7 +570,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/1961658794410385552",
       "photos": [],
       "replies": 0,
-      "retweets": 50578,
+      "retweets": 50418,
       "text": "RT @ardisatriawan: NOT. A. SINGLE. FUCKING. APOLOGY. IN. THAT. FUCKING. LONG. BULLSHIT. PARAGRAPH.\n\nNONE.\n\nI. REPEAT.\n\nNOT. A. SINGLE. FUCK…",
       "thread": [],
       "urls": [],
@@ -530,7 +609,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 23303,
+      "retweets": 23221,
       "text": "RT @weirddalle: https://t.co/9LaqvcrKGb",
       "thread": [],
       "urls": [],
@@ -564,7 +643,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/1954360500084781120",
       "photos": [],
       "replies": 0,
-      "retweets": 55,
+      "retweets": 56,
       "text": "RT @jadoodoo_: $ETH holders’ emotional shifts in 2025 https://t.co/G7gyBEWZts",
       "thread": [],
       "urls": [],
@@ -682,7 +761,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 640,
+      "retweets": 632,
       "text": "RT @naiivememe: RIP https://t.co/3IUXPiSVs2",
       "thread": [],
       "urls": [],
@@ -789,7 +868,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 5479,
+      "retweets": 5442,
       "text": "RT @iraninarabic_ir: احوال الطقس في تل ابيب المحتلة 🚀 https://t.co/qPvaiyJyno",
       "thread": [],
       "urls": [],
@@ -832,7 +911,7 @@
       "timeParsed": "2025-06-08T10:33:51.000Z",
       "timestamp": 1749378831000,
       "html": "kelass king 👑",
-      "views": 65
+      "views": 66
     },
     {
       "bookmarkCount": 0,
@@ -1025,7 +1104,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 1423,
+      "retweets": 1421,
       "text": "RT @txtdrimedia: https://t.co/6mMf5pDsw0",
       "thread": [],
       "urls": [],
@@ -1059,7 +1138,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/1905087673880154296",
       "photos": [],
       "replies": 0,
-      "retweets": 16001,
+      "retweets": 15945,
       "text": "RT @TameeOliveFern: Yes because genocide is prohibited in Islam",
       "thread": [],
       "urls": [],
@@ -1147,7 +1226,7 @@
       "timeParsed": "2025-03-07T09:48:29.000Z",
       "timestamp": 1741340909000,
       "html": "@BlitzSovereign https://t.co/XBuBilGFRu",
-      "views": 28
+      "views": 29
     },
     {
       "bookmarkCount": 0,
@@ -1186,7 +1265,7 @@
       "timeParsed": "2025-03-05T21:50:31.000Z",
       "timestamp": 1741211431000,
       "html": "@lulaalulilul https://t.co/n73wk2oc4u",
-      "views": 67
+      "views": 68
     },
     {
       "bookmarkCount": 0,
@@ -1390,7 +1469,7 @@
       "permanentUrl": "https://x.com/achrysanf/status/1407356083874664448",
       "photos": [],
       "replies": 0,
-      "retweets": 315,
+      "retweets": 314,
       "text": "RT @Tuont0: i feel like ive missed out on so many things in life\ndont know why",
       "thread": [],
       "urls": [],
@@ -1491,7 +1570,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 573,
+      "retweets": 571,
       "text": "RT @sandhikagalih: 3 Stages of Programming.. https://t.co/8LY8GHS6zS",
       "thread": [],
       "urls": [],
@@ -1651,7 +1730,7 @@
       "likes": 0,
       "mentions": [
         {
-          "name": "PAIMON: Joki Wiwa-nyan~",
+          "name": "COLUMBINAFESS 🪽",
           "username": "paimonfess",
           "id": "1318848121498075136"
         }
@@ -1817,7 +1896,7 @@
         }
       ],
       "replies": 0,
-      "retweets": 9440,
+      "retweets": 9428,
       "text": "RT @HALALHOTTlE: me rn https://t.co/6Hgn4e4D50",
       "thread": [],
       "urls": [],
@@ -3320,74 +3399,6 @@
       "timeParsed": "2021-03-13T16:59:11.000Z",
       "timestamp": 1615654751000,
       "html": "@sopokoweasu kawaki no ameku, kanade - sukima switch (ost one week friend), moshi kimi wo yurusetara - ieri leo, mikansei - ieri leo, unlasting - LiSA, kokoronashi  - majiko,",
-      "views": 0
-    },
-    {
-      "bookmarkCount": 0,
-      "conversationId": "1370771755854409729",
-      "id": "1370782045706674180",
-      "hashtags": [],
-      "likes": 0,
-      "mentions": [
-        {
-          "name": "watashi anime",
-          "username": "sopokoweasu",
-          "id": "1200387546426957824"
-        }
-      ],
-      "name": "riqss",
-      "permanentUrl": "https://x.com/achrysanf/status/1370782045706674180",
-      "photos": [],
-      "replies": 0,
-      "retweets": 0,
-      "text": "@sopokoweasu masih ada beberapa lagi, tpi itu yg rekomen sii",
-      "thread": [],
-      "urls": [],
-      "userId": "1139741470779269122",
-      "username": "achrysanf",
-      "videos": [],
-      "isQuoted": false,
-      "isReply": true,
-      "isRetweet": false,
-      "isPin": false,
-      "sensitiveContent": false,
-      "timeParsed": "2021-03-13T17:01:22.000Z",
-      "timestamp": 1615654882000,
-      "html": "@sopokoweasu masih ada beberapa lagi, tpi itu yg rekomen sii",
-      "views": 0
-    },
-    {
-      "bookmarkCount": 0,
-      "conversationId": "1370634066219823106",
-      "id": "1370650527709601796",
-      "hashtags": [],
-      "likes": 0,
-      "mentions": [
-        {
-          "name": "Rére",
-          "username": "binsamuel_",
-          "id": "1092003493831835648"
-        }
-      ],
-      "name": "riqss",
-      "permanentUrl": "https://x.com/achrysanf/status/1370650527709601796",
-      "photos": [],
-      "replies": 1,
-      "retweets": 0,
-      "text": "@binsamuel_ google lens re",
-      "thread": [],
-      "urls": [],
-      "userId": "1139741470779269122",
-      "username": "achrysanf",
-      "videos": [],
-      "isQuoted": false,
-      "isReply": true,
-      "isRetweet": false,
-      "isPin": false,
-      "sensitiveContent": false,
-      "timeParsed": "2021-03-13T08:18:45.000Z",
-      "timestamp": 1615623525000,
-      "html": "@binsamuel_ google lens re",
       "views": 0
     }
   ],
