@@ -250,10 +250,10 @@ class IdentifiScore:
                 # spam link, originality, text detect collection
                 if tweet.isRetweet == False:
                     # engagement
-                    views_count += tweet.views
-                    likes_count += tweet.likes
-                    retweets_count += tweet.retweets
-                    replies_count += tweet.replies
+                    views_count += tweet.views if tweet.views is not None else 0
+                    likes_count += tweet.likes if tweet.likes is not None else 0
+                    retweets_count += tweet.retweets if tweet.retweets is not None else 0
+                    replies_count += tweet.replies if tweet.replies is not None else 0
 
                     # spam similarity score
                     sim_score = IdentifiScore.get_spam_score(tweet.text, index, tfidf_matrix, embed_matrix, embedder, tfidf)
