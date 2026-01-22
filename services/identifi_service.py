@@ -37,10 +37,13 @@ class IdentifiScore:
     the a an is are was were be to of and or in on for as by with this that it
     """.split())
 
-    MEDIA_RICHNESS_WEIGHT = {"image": 0.3, "video": 0.6}
+    MEDIA_RICHNESS_WEIGHT = {
+        "image": float(os.getenv('MEDIA_RICHNESS_WEIGHT_IMAGE', '0.3')),
+        "video": float(os.getenv('MEDIA_RICHNESS_WEIGHT_VIDEO', '0.6'))
+    }
 
-    SIMILARITY_SPAM_THRESHOLDS = 0.9
-    SPAM_PENALTY_MULTIPLIER = 8
+    SIMILARITY_SPAM_THRESHOLDS = float(os.getenv('SIMILARITY_SPAM_THRESHOLDS', '0.9'))
+    SPAM_PENALTY_MULTIPLIER = int(os.getenv('SPAM_PENALTY_MULTIPLIER', '7'))
 
     @staticmethod
     def get_media_richness_score(photos: int, videos: int):
