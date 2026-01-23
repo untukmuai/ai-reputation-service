@@ -119,13 +119,13 @@ class IdentifiScore:
             0.20 * f_word +
 
             # Naturalness (32%)
-            -0.15 * long_word_penalty -
-            -0.15 * vowel_penalty -
-            0.07 * low_diversity_penalty +
+            -0.15 * long_word_penalty +
+            -0.15 * vowel_penalty +
+            -0.07 * low_diversity_penalty +
 
             # Noise (12%)
-            -0.10 * hashtag_density -
-            -0.03 * emoji_density -
+            -0.10 * hashtag_density +
+            -0.03 * emoji_density +
             -0.05 * punct_complexity +
 
             # Stopwords (11%)
@@ -208,15 +208,22 @@ class IdentifiScore:
 
             tweet_obj_list = []
             seen_tweet_ids = set()
+            tweets_list = []
+            tweet_set_detect_spam = set()
+            tweet_text_index_map = {}  # maps original index to filtered index
 
             # ensure unique tweet id
             for tweet in payload.tweets:
                 if tweet.id not in seen_tweet_ids:
+                    current_index = len(tweet_obj_list)  # store before appending
                     tweet_obj_list.append(tweet)
                     seen_tweet_ids.add(tweet.id)
-
+                    tweet.text = IdentifiScoreUtil.clean_tweet(tweet.text)
+                    if len(tweet.text) > 0:
+                        tweet_text_index_map[current_index] = len(tweets_list)  # map original to filtered
+                        tweets_list.append(tweet.text)
+                        tweet_set_detect_spam.add(tweet.id)
             tweet_len = len(tweet_obj_list)
-            tweets_list = []
 
             # accumulators
             readability_score = 0
@@ -231,14 +238,10 @@ class IdentifiScore:
             spam_sim_tweets_arr = []
             original_count = 0
             detect_text = ""
-
-            # collect tweet texts, clean, and ensure unique tweet id
-            for tweet in tweet_obj_list:
-                tweet.text = IdentifiScoreUtil.clean_tweet(tweet.text)
-                tweets_list.append(tweet.text)
             
             # Prepare spam detection features from all tweets
-            tfidf_matrix, embed_matrix = IdentifiScore.prepare_spam_features(tweets_list, embedder, tfidf)
+            if len(tweets_list) > 0:
+                tfidf_matrix, embed_matrix = IdentifiScore.prepare_spam_features(tweets_list, embedder, tfidf)
 
             # calculate scores
             for index, tweet in enumerate(tweet_obj_list):
@@ -255,15 +258,17 @@ class IdentifiScore:
                     retweets_count += tweet.retweets if tweet.retweets is not None else 0
                     replies_count += tweet.replies if tweet.replies is not None else 0
 
-                    # spam similarity score
-                    sim_score = IdentifiScore.get_spam_score(tweet.text, index, tfidf_matrix, embed_matrix, embedder, tfidf)
-                    # print(f"{tweet.text} || SIM SCORE: {sim_score}")
-                    if sim_score >= IdentifiScore.SIMILARITY_SPAM_THRESHOLDS:
-                        spam_sim_arr.append(sim_score)
-                        spam_sim_tweets_arr.append({
-                            "tweet": tweet.text,
-                            "id": tweet.id
-                        })
+                    # spam similarity score. only detect spam if tweet is marked 
+                    if tweet.id in tweet_set_detect_spam:
+                        filtered_index = tweet_text_index_map[index]
+                        sim_score = IdentifiScore.get_spam_score(tweet.text, filtered_index, tfidf_matrix, embed_matrix, embedder, tfidf)
+                        # print(f"{tweet.text} || SIM SCORE: {sim_score}")
+                        if sim_score >= IdentifiScore.SIMILARITY_SPAM_THRESHOLDS:
+                            spam_sim_arr.append(sim_score)
+                            spam_sim_tweets_arr.append({
+                                "tweet": tweet.text,
+                                "id": tweet.id
+                            })
 
                     spammy_link_score += IdentifiScore.get_link_spam_score(tweet.text)
                     original_count += 1
@@ -305,7 +310,10 @@ class IdentifiScore:
                     value = 1 if voter.vote == "up" else -1
                     feedback_value += value * weight 
                     
-                feedback_score = feedback_value / feedback_weight_sum
+                if feedback_weight_sum > 0:
+                    feedback_score = feedback_value / feedback_weight_sum
+                else:
+                    feedback_score = 0
 
             # quality score
             originality_score = round((original_count / tweet_len) * 100, 2)
@@ -339,9 +347,9 @@ class IdentifiScore:
             badges_score = 0
             on_chain_score = 0
             
-            if payload.address:
-                referral_service = SomniaReferralService()
-                referral_count = await referral_service.get_referral_count_async(payload.address)
+            # if payload.address:
+            #     referral_service = SomniaReferralService()
+            #     referral_count = await referral_service.get_referral_count_async(payload.address)
 
             if(referral_count > 0):
                 referral_score = math.log10(referral_count + 1) * 30
