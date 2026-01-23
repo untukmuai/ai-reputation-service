@@ -8,6 +8,10 @@ from utils.libs_loader import libs_loader
 
 app = Robyn(__file__)
 
+@app.get("/health")
+def health_check():
+    return "OK"
+
 print("Initializing AI Rep Service")
 libs_loader.load_all()
 
