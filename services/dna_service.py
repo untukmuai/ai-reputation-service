@@ -1,4 +1,6 @@
 import os
+import re
+import time
 from openai import AsyncOpenAI
 from models.requests.dna_request import RequestDigitalDNA, RequestDigitalDNAImage
 from utils.image_helper import get_average_hex_color
@@ -306,37 +308,76 @@ class DNAService:
     @staticmethod
     async def generate_dna_image(payload: RequestDigitalDNAImage) -> str:
         try:
-            prompt = f"""You are a visual design AI trained to generate stylized gamified badge icons. Your task is to create a descriptive visual concept for a badge icon based on the input title, using the style described below.
+            logger.info(f'GENERATE_DNA_IMAGE {payload.title}')
 
-            **Style Guide:**
-            - Modern, 3D-styled hexagon or shield-shaped badge
-            - Glowing gradients and high contrast colors
-            - Smooth shadows and lighting effects
-            - Symbolic, fantasy-style icon in the center (e.g. wand, wings, vault, camera)
-            - Progress bar or visual indicator optional
-            - Similar to mobile RPG/UI badges or NFT gamification
-
-            **Input Title:** {payload.title}
-
-            **Instructions:**
-            1. Identify a metaphor or symbol to represent the input (e.g., “wand” for DeFi = magical finance).
-            2. Suggest a color palette that matches the concept (e.g., green for finance, blue for trust).
-            3. Describe the icon’s shape and what’s in the center (e.g., golden shield with a glowing lamp).
-            4. Match the polished, glowing 3D style with fantasy or futuristic elements.
-            5. Output a concise description suitable for an image generation AI prompt.
-
-            **Example Output for “Personal Finance Advisor”:**  
-            A polished blue hexagonal badge with a glowing golden winged lamp in the center, symbolizing guidance and trust. Smooth gradient from dark to electric blue, accented with sparkles. The icon has a soft shadow, glowing edges, and resembles a gamified digital achievement badge."""
             client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+            #transform text to semantic resource
+            text_prompt = f"""
+            Convert the input title into a rich, descriptive, safe visual concept for a fantasy-tech badge icon.
+
+            Rules:
+            - Output must be a single descriptive phrase or short sentence (8–16 words).
+            - Preserve the conceptual meaning through symbolic visual structure.
+            - Use only abstract, fantasy-tech, or futuristic visual elements.
+            - Do not reference real people, groups, cultures, ideologies, beliefs, or social systems.
+            - Do not include emotions, opinions, or narratives.
+            - Do not include real-world metaphors (politics, society, religion, culture).
+            - Use visual language: shape, structure, energy, light, motion, materials, geometry.
+            - Must be safe for image generation systems.
+
+            ====== Example ======
+            Input: "Data Privacy"
+            Output: "rotating shield lattice around a glowing data crystal"
+            ====== End of Example ======
+            """
+
+            semantic_transformer = await client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {
+                        "role": "system",
+                        "content": text_prompt
+                    },
+                    {
+                        "role": "user",
+                        "content": payload.title
+                    }
+                ],
+                seed=42
+            )
+            visual = semantic_transformer.choices[0].message.content
+
+            logger.info(f'GENERATE_DNA_IMAGE {payload.title} TRANSFORMED >> {visual}')
+
+            image_prompt = f"""You are a visual design AI trained to generate stylized gamified badge icons. 
+                Your task is to create a descriptive visual concept for a badge icon based on the input title, using the style described below.
+
+                **Style Guide:**
+                - Modern, 3D-styled hexagon or shield-shaped badge
+                - Glowing gradients and high contrast colors
+                - Smooth shadows and lighting effects
+                - Symbolic, fantasy-style icon in the center (e.g. orb, rune, crystal, signal beam, network node, prism)
+                - Progress bar or visual indicator optional
+                - Similar to mobile RPG/UI badges or NFT gamification
+
+                **Instructions:**
+                1. Suggest a neutral color palette.
+                2. Describe the icon’s shape and what’s in the center.
+                3. Match the polished, glowing 3D style with fantasy or futuristic elements.
+                4. Output a concise description suitable for an image generation AI prompt.
+                5. Do not reference real-world groups, movements, systems, or ideologies.
+
+                **Input Prompt:** {visual}
+                """
 
             response = await client.images.generate(
                 model="dall-e-3",
-                prompt=prompt,
+                prompt=image_prompt,
                 size="1024x1024",
                 quality="standard",
                 n=1,
             )
-
+            logger.info(f'GENERATE_DNA_IMAGE {payload.title} IMAGE GENERATED - REMOVING BACKGROUND')
             response = requests.get(response.data[0].url)
             response.raise_for_status()
 
@@ -349,7 +390,8 @@ class DNAService:
             nobg_image.save(buffer, format="PNG")
             buffer.seek(0)
             image_b64 = base64.b64encode(buffer.read()).decode('utf-8')
-            
+
+            logger.info(f'GENERATE_DNA_IMAGE {payload.title} IMAGE FINISH')
             image = {
                 "image_b64": image_b64,
                 "background_hex": average_hex
