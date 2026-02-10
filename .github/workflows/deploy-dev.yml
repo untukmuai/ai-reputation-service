@@ -1,9 +1,9 @@
-name: Deploy Simulate to OVHCloud
+name: Deploy Dev to OVHCloud
 
 on:
   push:
     branches:
-      - simulate-ovhcloud
+      - dev
 
 jobs:
   deploy:
@@ -40,10 +40,10 @@ jobs:
               git fetch --all
             fi
 
-            echo "🚀 Switching to simulate-ovhcloud branch"
-            git checkout simulate-ovhcloud
-            git pull origin simulate-ovhcloud
-            git reset --hard origin/simulate-ovhcloud
+            echo "🚀 Switching to dev branch"
+            git checkout dev
+            git pull origin dev
+            git reset --hard origin/dev
 
             echo "🧹 Removing existing Dockerfile and compose"
             sudo rm -f docker-compose.yml
@@ -65,7 +65,7 @@ jobs:
             sudo docker compose ps
 
             if sudo docker compose ps | grep -q "Up"; then
-              echo "✅ Deployment simulate-ovhcloud successful!"
+              echo "✅ Deployment dev successful!"
               sudo docker compose logs --tail=50
             else
               echo "❌ Deployment failed!"
@@ -75,8 +75,8 @@ jobs:
 
       - name: Deployment Success
         if: success()
-        run: echo "✅ simulate-ovhcloud deployment completed successfully."
+        run: echo "✅ dev deployment completed successfully."
 
       - name: Deployment Failed
         if: failure()
-        run: echo "❌ simulate-ovhcloud deployment failed. Check server logs."
+        run: echo "❌ dev deployment failed. Check server logs."
