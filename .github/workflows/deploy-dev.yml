@@ -1,0 +1,82 @@
+name: Deploy Dev to OVHCloud
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.HOST_SERVER }}
+          username: ${{ secrets.USERNAME_SERVER }}
+          password: ${{ secrets.PASSWORD_SERVER }}
+
+          script: |
+            set -e
+
+            echo "📍 Target directory: ${{ secrets.PATH_SERVER }}"
+
+            if [ ! -d "${{ secrets.PATH_SERVER }}" ]; then
+              echo "📁 Directory not found, creating..."
+              mkdir -p ${{ secrets.PATH_SERVER }}
+            fi
+
+            cd ${{ secrets.PATH_SERVER }}
+
+            if [ ! -d ".git" ]; then
+              echo "🌀 Cloning repository..."
+              git clone ${{ secrets.GIT_REPO_URL }} .
+            else
+              echo "🔄 Fetching latest changes..."
+              git fetch --all
+            fi
+
+            echo "🚀 Switching to dev branch"
+            git checkout dev
+            git pull origin dev
+            git reset --hard origin/dev
+
+            echo "🧹 Removing existing Dockerfile and compose"
+            sudo rm -f docker-compose.yml
+
+            echo "📄 Copying Dockerfile and docker-compose from server path"
+            sudo cp ${{ secrets.PATH_DOCKER_COMPOSE }} docker-compose.yml
+
+            echo "🔧 Export env file path for Docker"
+            export PATH_ENV_SERVER=${{ secrets.PATH_ENV_SERVER }}
+
+            echo "🐳 Rebuilding and restarting Docker containers"
+            sudo docker compose down
+            sudo docker compose up -d --build
+
+            echo "⏳ Waiting for containers to initialize..."
+            sleep 10
+
+            echo "📦 Checking container status"
+            sudo docker compose ps
+
+            if sudo docker compose ps | grep -q "Up"; then
+              echo "✅ Deployment dev successful!"
+              sudo docker compose logs --tail=50
+            else
+              echo "❌ Deployment failed!"
+              sudo docker compose logs --tail=50
+              exit 1
+            fi
+
+      - name: Deployment Success
+        if: success()
+        run: echo "✅ dev deployment completed successfully."
+
+      - name: Deployment Failed
+        if: failure()
+        run: echo "❌ dev deployment failed. Check server logs."
