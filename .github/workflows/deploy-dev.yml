@@ -54,9 +54,9 @@ jobs:
             echo "🔧 Export env file path for Docker"
             export PATH_ENV_SERVER=${{ secrets.PATH_ENV_SERVER }}
 
-            echo "🐳 Rebuilding and restarting Docker containers"
-            sudo docker compose down
-            sudo docker compose up -d --build
+            echo "🐳 Pulling, rebuilding and restarting Docker containers safely"
+            sudo docker compose pull
+            sudo docker compose up -d --build --remove-orphans
 
             echo "⏳ Waiting for containers to initialize..."
             sleep 10
