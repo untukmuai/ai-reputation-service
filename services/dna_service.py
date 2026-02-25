@@ -198,7 +198,7 @@ class DNAService:
             
             # Convert title set to sorted string for consistent ordering
             title_str = " ".join(sorted(title)) if isinstance(title, set) else " ".join(title)
-            is_list_exceeded = len(title) > 1000
+            is_list_exceeded = len(title) >= 1000
             prompt_instruction = disable_newly_generate_prompt if is_list_exceeded else enable_newly_generate_prompt
             title_content = title_str
             
