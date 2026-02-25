@@ -49,7 +49,7 @@ class DNAService:
             ]
 
             texts_dumps = orjson.dumps(texts)
-
+            print(f"total dna exists: {len(title)}")
             response_schema = {
                 "type": "ARRAY",
                 "description": "Given the user tweets, provide categories(1-2 words) and its percentage sum up to 100% in total. Provide also example of the tweet, and 2 insights.",
@@ -192,14 +192,18 @@ class DNAService:
             texts_dumps = orjson.dumps(truncated_texts)
             
             # Pre-calculate title string and conditional prompt (Point 8: Fix conditional logic)
-            thousand_prompt = "3. Please reuse the existing category only stated here, so don't create any new category"
-            usual_prompt = "3. **Prioritize the following existing categories** (only invent a new one if none match semantically):"
+            disable_newly_generate_prompt = """3. You MUST ONLY use categories from the following list. Do NOT create new categories under any circumstances.
+            Allowed categories:"""
+            enable_newly_generate_prompt = "3. Prioritize the following existing categories (only invent a new one if none match semantically):"
             
             # Convert title set to sorted string for consistent ordering
             title_str = " ".join(sorted(title)) if isinstance(title, set) else " ".join(title)
-            use_truncated = len(title_str) > 1000
-            prompt_instruction = thousand_prompt if use_truncated else usual_prompt
-            title_content = title_str[:1000] if use_truncated else title_str
+            is_list_exceeded = len(title) > 1000
+            prompt_instruction = disable_newly_generate_prompt if is_list_exceeded else enable_newly_generate_prompt
+            title_content = title_str
+            
+            # Use lower temperature when enforcing strict category reuse
+            temperature = 0.5 if is_list_exceeded else 0.9
 
             text_prompt = f"""Analyze these tweets and identify {dna_generated_count} distinct personality/content DNA traits.
             
@@ -211,9 +215,9 @@ class DNAService:
             2. Avoid semantic redundancy - reuse existing categories if meaning matches
             {prompt_instruction}
             {title_content}
-            3. You should identify and output {dna_generated_count} distinct traits
-            4. Percentages must total exactly 100%
-            5. Each trait needs: category, description (1 paragraph), percentage, sample tweet with metrics, and 2 insights
+            4. You should identify and output {dna_generated_count} distinct traits
+            5. Percentages must total exactly 100%
+            6. Each trait needs: category, description (1 paragraph), percentage, sample tweet with metrics, and 2 insights
 
             Don't repeat categories."""
 
@@ -225,11 +229,11 @@ class DNAService:
                     'safety_settings': SAFETY_SETTINGS,
                     'response_mime_type': 'application/json',
                     'response_schema': response_schema,
-                    "temperature": 0.9,        # Balanced creativity for structured output
-                    "top_p": 0.98,            # Nearly full vocabulary access
-                    "top_k": 64,              # Standard token sampling
-                    "frequency_penalty": 0.6,  # Moderate anti-repetition
-                    "presence_penalty": 0.4,   # Encourage topic diversity
+                    "temperature": temperature,
+                    "top_p": 0.98,
+                    "top_k": 64,
+                    "frequency_penalty": 0.6,
+                    "presence_penalty": 0.4,
                 }
             )
 
