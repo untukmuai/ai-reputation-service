@@ -43,7 +43,7 @@ class DNAService:
                     "replies": i.replies,
                     "retweets": i.retweets,
                     "views": i.views or 0,  
-                    "timeParsed": i.timeParsed,
+                    "postedAt": i.postedAt,
                 }
                 for i in tw
             ]
@@ -90,9 +90,9 @@ class DNAService:
                             "type": "INTEGER",
                             "description": "total views of that mention"
                         },
-                        "timeParsed": {
+                        "postedAt": {
                             "type": "STRING",
-                            "description": "timeParsed of that mention"
+                            "description": "postedAt of that mention"
                         },
                         "insights": {
                             "type": "ARRAY",
@@ -122,7 +122,7 @@ class DNAService:
                         "replies", 
                         "retweets", 
                         "views", 
-                        "timeParsed",
+                        "postedAt",
                         "insights"
                     ]
                 }
@@ -281,7 +281,7 @@ class DNAService:
                     "replies": int(val["replies"]),
                     "retweets": int(val["retweets"]),
                     "views": int(val["views"]),
-                    "time": val["timeParsed"],
+                    "time": val["postedAt"],
                     "ai_insight": val["insights"]
                 }
                 
