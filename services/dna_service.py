@@ -375,20 +375,32 @@ class DNAService:
                 """
 
             response = await client.images.generate(
-                model="dall-e-3",
+                model="gpt-image-2",
                 prompt=image_prompt,
                 size="1024x1024",
-                quality="standard",
+                quality="low",
                 n=1,
             )
             logger.info(f'GENERATE_DNA_IMAGE {payload.title} IMAGE GENERATED - REMOVING BACKGROUND')
-            response = requests.get(response.data[0].url)
-            response.raise_for_status()
+            # logger.info(f'GENERATE_DNA_IMAGE {response}')
+            # response = requests.get(response.data[0].url)
+            # response.raise_for_status()
 
-            input_image = Image.open(BytesIO(response.content))
+            image_base64 = response.data[0].b64_json
+            image_bytes = base64.b64decode(image_base64)
+            input_image = Image.open(BytesIO(image_bytes))
             nobg_image = remove(input_image)
 
             average_hex = get_average_hex_color(nobg_image)
+
+            # DEBUG: Save images to project folder for debugging
+            # from datetime import datetime
+            # debug_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "debug_images")
+            # os.makedirs(debug_dir, exist_ok=True)
+            # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            # input_image.save(os.path.join(debug_dir, f"{timestamp}_original.png"), format="PNG")
+            # nobg_image.save(os.path.join(debug_dir, f"{timestamp}_nobg.png"), format="PNG")
+            # logger.info(f'DEBUG: Images saved to {debug_dir}')
 
             buffer = BytesIO()
             nobg_image.save(buffer, format="PNG")
