@@ -43,7 +43,7 @@ class DNAService:
                     "replies": i.replies,
                     "retweets": i.retweets,
                     "views": i.views or 0,  
-                    "postedAt": i.postedAt,
+                    "timeParsed": i.timeParsed,
                 }
                 for i in tw
             ]
@@ -90,9 +90,9 @@ class DNAService:
                             "type": "INTEGER",
                             "description": "total views of that mention"
                         },
-                        "postedAt": {
+                        "timeParsed": {
                             "type": "STRING",
-                            "description": "postedAt of that mention"
+                            "description": "timeParsed of that mention"
                         },
                         "insights": {
                             "type": "ARRAY",
@@ -122,7 +122,7 @@ class DNAService:
                         "replies", 
                         "retweets", 
                         "views", 
-                        "postedAt",
+                        "timeParsed",
                         "insights"
                     ]
                 }
@@ -281,7 +281,7 @@ class DNAService:
                     "replies": int(val["replies"]),
                     "retweets": int(val["retweets"]),
                     "views": int(val["views"]),
-                    "time": val["postedAt"],
+                    "time": val["timeParsed"],
                     "ai_insight": val["insights"]
                 }
                 
@@ -375,32 +375,20 @@ class DNAService:
                 """
 
             response = await client.images.generate(
-                model="gpt-image-2",
+                model="dall-e-3",
                 prompt=image_prompt,
                 size="1024x1024",
-                quality="low",
+                quality="standard",
                 n=1,
             )
             logger.info(f'GENERATE_DNA_IMAGE {payload.title} IMAGE GENERATED - REMOVING BACKGROUND')
-            # logger.info(f'GENERATE_DNA_IMAGE {response}')
-            # response = requests.get(response.data[0].url)
-            # response.raise_for_status()
+            response = requests.get(response.data[0].url)
+            response.raise_for_status()
 
-            image_base64 = response.data[0].b64_json
-            image_bytes = base64.b64decode(image_base64)
-            input_image = Image.open(BytesIO(image_bytes))
+            input_image = Image.open(BytesIO(response.content))
             nobg_image = remove(input_image)
 
             average_hex = get_average_hex_color(nobg_image)
-
-            # DEBUG: Save images to project folder for debugging
-            # from datetime import datetime
-            # debug_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "debug_images")
-            # os.makedirs(debug_dir, exist_ok=True)
-            # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-            # input_image.save(os.path.join(debug_dir, f"{timestamp}_original.png"), format="PNG")
-            # nobg_image.save(os.path.join(debug_dir, f"{timestamp}_nobg.png"), format="PNG")
-            # logger.info(f'DEBUG: Images saved to {debug_dir}')
 
             buffer = BytesIO()
             nobg_image.save(buffer, format="PNG")
