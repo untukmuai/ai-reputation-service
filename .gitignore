@@ -3,8 +3,6 @@ __pycache__/
 *.py[codz]
 *$py.class
 
-debug_images
-
 # C extensions
 *.so
 
