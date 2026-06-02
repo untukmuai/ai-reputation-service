@@ -232,8 +232,8 @@ class DNAService:
                     "temperature": temperature,
                     "top_p": 0.98,
                     "top_k": 64,
-                    "frequency_penalty": 0.6,
-                    "presence_penalty": 0.4,
+                    # "frequency_penalty": 0.6,
+                    # "presence_penalty": 0.4,
                 }
             )
 
