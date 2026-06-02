@@ -143,7 +143,7 @@ class DNAService:
                 sample_json = orjson.dumps(sample_texts)
                 
                 sample_resp = client.models.count_tokens(
-                    model='gemini-2.0-flash-lite',
+                    model='gemini-2.5-flash-lite',
                     contents=sample_json
                 )
                 
@@ -156,7 +156,7 @@ class DNAService:
                 
                 # Single verification count
                 token_resp = client.models.count_tokens(
-                    model='gemini-2.0-flash-lite',
+                    model='gemini-2.5-flash-lite',
                     contents=texts_dumps
                 )
                 token_count = token_resp.total_tokens or 0
@@ -171,7 +171,7 @@ class DNAService:
                 # Small dataset, just count once
                 texts_dumps = orjson.dumps(texts)
                 token_resp = client.models.count_tokens(
-                    model='gemini-2.0-flash-lite',
+                    model='gemini-2.5-flash-lite',
                     contents=texts_dumps
                 )
                 token_count = token_resp.total_tokens or 0
@@ -223,7 +223,7 @@ class DNAService:
 
 
             text_task = await client.aio.models.generate_content(
-                model='gemini-2.0-flash-lite',
+                model='gemini-2.5-flash-lite',
                 contents=text_prompt,
                 config={
                     'safety_settings': SAFETY_SETTINGS,
