@@ -43,7 +43,7 @@ class DNAService:
                     "replies": i.replies,
                     "retweets": i.retweets,
                     "views": i.views or 0,  
-                    "timeParsed": i.timeParsed,
+                    "postedAt": i.postedAt,
                 }
                 for i in tw
             ]
@@ -90,9 +90,9 @@ class DNAService:
                             "type": "INTEGER",
                             "description": "total views of that mention"
                         },
-                        "timeParsed": {
+                        "postedAt": {
                             "type": "STRING",
-                            "description": "timeParsed of that mention"
+                            "description": "postedAt of that mention"
                         },
                         "insights": {
                             "type": "ARRAY",
@@ -122,7 +122,7 @@ class DNAService:
                         "replies", 
                         "retweets", 
                         "views", 
-                        "timeParsed",
+                        "postedAt",
                         "insights"
                     ]
                 }
@@ -143,7 +143,7 @@ class DNAService:
                 sample_json = orjson.dumps(sample_texts)
                 
                 sample_resp = client.models.count_tokens(
-                    model='gemini-2.0-flash-lite',
+                    model='gemini-2.5-flash-lite',
                     contents=sample_json
                 )
                 
@@ -156,7 +156,7 @@ class DNAService:
                 
                 # Single verification count
                 token_resp = client.models.count_tokens(
-                    model='gemini-2.0-flash-lite',
+                    model='gemini-2.5-flash-lite',
                     contents=texts_dumps
                 )
                 token_count = token_resp.total_tokens or 0
@@ -171,7 +171,7 @@ class DNAService:
                 # Small dataset, just count once
                 texts_dumps = orjson.dumps(texts)
                 token_resp = client.models.count_tokens(
-                    model='gemini-2.0-flash-lite',
+                    model='gemini-2.5-flash-lite',
                     contents=texts_dumps
                 )
                 token_count = token_resp.total_tokens or 0
@@ -223,7 +223,7 @@ class DNAService:
 
 
             text_task = await client.aio.models.generate_content(
-                model='gemini-2.0-flash-lite',
+                model='gemini-2.5-flash-lite',
                 contents=text_prompt,
                 config={
                     'safety_settings': SAFETY_SETTINGS,
@@ -232,8 +232,8 @@ class DNAService:
                     "temperature": temperature,
                     "top_p": 0.98,
                     "top_k": 64,
-                    "frequency_penalty": 0.6,
-                    "presence_penalty": 0.4,
+                    # "frequency_penalty": 0.6,
+                    # "presence_penalty": 0.4,
                 }
             )
 
@@ -281,7 +281,7 @@ class DNAService:
                     "replies": int(val["replies"]),
                     "retweets": int(val["retweets"]),
                     "views": int(val["views"]),
-                    "time": val["timeParsed"],
+                    "time": val["postedAt"],
                     "ai_insight": val["insights"]
                 }
                 

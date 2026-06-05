@@ -20,32 +20,35 @@ class TweetMention(BaseModel, Body):
 
 
 class Tweets(BaseModel, Body):
-    bookmarkCount: int
-    conversationId: str
     id: str
     hashtags: List[str]
     likes: int
     mentions: List[TweetMention]
     name: Optional[str]
-    permanentUrl: Optional[str]
     photos: List[TweetPhoto]
     replies: int
     retweets: int
+    views: Optional[int] = None
     text: str
-    thread: List[str]
-    urls: List[str]
     userId: str
     username: Optional[str]
     videos: List[TweetVideo]
     isQuoted: bool
     isReply: bool
     isRetweet: bool
-    isPin: bool
-    sensitiveContent: bool
-    timeParsed: str
     timestamp: int
-    html: str
-    views: Optional[int] = None
+    postedAt: str
+    quotes: int
+    # bookmarkCount: int
+    # conversationId: str
+    # permanentUrl: Optional[str]
+    # thread: List[str]
+    # urls: List[str]
+    # isPin: bool
+    # sensitiveContent: bool
+    # timeParsed: str
+    # html: str
+
 
 
 
