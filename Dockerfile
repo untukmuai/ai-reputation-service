@@ -1,9 +1,10 @@
-FROM python:3.11-bookworm
+FROM python:3.14-bookworm
 
 # Set environment variables for model caching
 ENV U2NET_HOME=/workspace/.u2net
 ENV SENTENCE_TRANSFORMERS_HOME=/workspace/.cache/sentence_transformers
 ENV TRANSFORMERS_CACHE=/workspace/.cache/huggingface
+ENV CUDA_VISIBLE_DEVICES=""
 
 WORKDIR /workspace
 
@@ -11,7 +12,8 @@ WORKDIR /workspace
 COPY requirements.txt .
 
 # Install Python dependencies
-RUN pip install --no-cache-dir --upgrade -r requirements.txt
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
 # Pre-download ML models during build to avoid runtime downloads
 RUN echo "Downloading sentence-transformers model..." \
